@@ -11,11 +11,11 @@
                 var vms = options.viewModels;
                 for (var ii = 0; ii < vms.length; ii++) {
                     var t = vms[ii];
-                    Mark.load(t.pathToTemplate, t, function (htmlTemplate, path, option) {
+                    Mistral.load(t.pathToTemplate, t, function (htmlTemplate, path, option) {
                         if (t.onBefore)
                             t.onBefore();
 
-                        Mark.renderIn(htmlTemplate, document.getElementById(option.renderIn), option, function (resp) {
+                        Mistral.renderIn(htmlTemplate, document.getElementById(option.renderIn), option, function (resp) {
                             if (option.onRendered)
                                 option.onRendered();
                             if (option.onAfter)
@@ -25,24 +25,25 @@
                 }
             }
 
-            Mark.config = options;
+            Mistral.config = options;
         },
         route: function (path, routeName, templates) {
-            Mark.routes.push({
+            Mistral.routes.push({
                 path: path,
                 routeName: routeName,
                 templates: templates
             });
         },
         render: function (path) {
-            var r = Mark.getRoute(path);
+            var r = Mistral.getRoute(path);
+            console.log(r);
             for (var jj = 0; jj < r.templates.length; jj++) {
                 var t = r.templates[jj];
-                Mark.load(t.pathToTemplate, t, function (htmlTemplate, path, option) {
+                Mistral.load(t.pathToTemplate, t, function (htmlTemplate, path, option) {
                     if (t.onBefore)
                         t.onBefore();
 
-                    Mark.renderIn(htmlTemplate, document.getElementById(option.renderIn), option, function (resp) {
+                    Mistral.renderIn(htmlTemplate, document.getElementById(option.renderIn), option, function (resp) {
                         if (option.onRendered)
                             option.onRendered();
                         if (option.onAfter)
@@ -57,17 +58,17 @@
         },
         routeOtherWise: function (path) {
 
-            var r = Mark.getRoute(window.location.hash.replace('#', ''));
+            var r = Mistral.getRoute(window.location.hash.replace('#', ''));
             console.log(r);
             if (r)
-                Mark.go(r.path);
-            else Mark.go(path);
+                Mistral.go(r.path);
+            else Mistral.go(path);
         },
         getRoute: function (path) {
             var result;
-            for (var ii = 0; ii < Mark.routes.length; ii++) {
-                if (Mark.routes[ii].path === path) {
-                    result = Mark.routes[ii];
+            for (var ii = 0; ii < Mistral.routes.length; ii++) {
+                if (Mistral.routes[ii].path === path) {
+                    result = Mistral.routes[ii];
                     break;
                 }
             }
@@ -75,10 +76,10 @@
         },
         getRouteByName: function (name) {
             var result;
-            for (var ii = 0; ii < Mark.routes.length; ii++) {
-                if (Mark.routes[ii].option)
-                    if (Mark.routes[ii].routeName === name) {
-                        result = Mark.routes[ii];
+            for (var ii = 0; ii < Mistral.routes.length; ii++) {
+                if (Mistral.routes[ii].option)
+                    if (Mistral.routes[ii].routeName === name) {
+                        result = Mistral.routes[ii];
                         break;
                     }
             }
@@ -86,7 +87,7 @@
         },
         go: function (path) {
             window.location.hash = '#' + path;
-            Mark.render(window.location.hash.replace('#', ''));
+            Mistral.render(window.location.hash.replace('#', ''));
         },
         load: function (path, option, callback) {
             var xobj = new XMLHttpRequest();
@@ -111,9 +112,9 @@
     };
 
     window.onhashchange = function (ret) {
-        Mark.render(window.location.hash.replace('#', ''));
-        if (Mark.config.viewModels) {
-            var vm = Mark.config.viewModels;
+        Mistral.render(window.location.hash.replace('#', ''));
+        if (Mistral.config.viewModels) {
+            var vm = Mistral.config.viewModels;
             for (var ii = 0; ii < vm.length; ii++) {
                 if (vm[ii].onRouteChanged())
                     vm[ii].onRouteChanged();
@@ -121,7 +122,7 @@
         }
     }
     document.addEventListener('DOMContentLoaded', function () {
-        Mark.go(window.location.hash.replace('#', ''));
+        Mistral.go(window.location.hash.replace('#', ''));
     }, false);
     Mst = Mistral;
 
