@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+</head>
+
+<body>
+    <div class="nav"></div>
+    <div id="content"></div>
+    <div class="nav"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="../release/mistral.js"></script>
+    <script>
+        var nav = {
+            pathToTemplate: 'templates/nav.html',
+            renderIn: '.nav',
+            name: 'nav'
+        };
+        Mistral.configure({
+            templates: [nav]
+        });
+        Mistral.route('/', 'base', [{
+            pathToTemplate: 'templates/hello.html',
+            renderIn: '#content',
+            name: 'hello'
+        }]);
+        Mistral.route('/about', 'about', [{
+            pathToTemplate: 'templates/about.html',
+            renderIn: '#content',
+            name: 'about'
+        }]);
+        Mistral.route('/newsfeed', 'newsfeed', [{
+            pathToTemplate: 'templates/newsfeed.html',
+            renderIn: '#content',
+            name: 'newsfeed',
+            data: {
+                name: "Yoza Wiratama",
+                newsfeed: [{
+                    "content": "Moe"
+                }, {
+                    "content": "Larry"
+                }, {
+                    "content": "Curly"
+                }]
+            }
+        }]);
+        Mistral.routeOtherWise('/');
+
+    </script>
+</body>
+
+</html>

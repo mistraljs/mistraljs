@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+</head>
+
+<body>
+    <div class="nav"></div>
+    <div id="content"></div>
+    <div class="nav"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="../release/mistral.js"></script>
+    <script>
+        var widget1 = {
+            pathToTemplate: 'templates/widget1.html',
+            name: 'widget 1',
+            renderPartials: 'widget1'
+        };
+        var widget2 = {
+            pathToTemplate: 'templates/widget2.html',
+            name: 'widget 2',
+            renderPartials: 'widget2',
+            data: {
+                employees: [{
+                    name: 'Yoza'
+                }, {
+                    name: 'Randy'
+                }]
+            }
+        };
+        Mistral.route('/', 'dashboard', [{
+            pathToTemplate: 'templates/dashboard.html',
+            renderIn: '#content',
+            name: 'dashboard',
+            templates: [widget1, widget2]
+        }]);
+        Mistral.routeOtherWise('/');
+
+    </script>
+</body>
+
+</html>
