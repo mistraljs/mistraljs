@@ -1,5 +1,5 @@
 # mistraljs
-Mistraljs is an modified and improvement of the [Mustache templating language](http://mustache.github.io/).
+Mistraljs is an modified and improvement of the [Mustache templating language](http://mustache.github.io/) created by Chris Wanstrath.
 Mistraljs is library use MVR-VM (Model View Route - ViewModel) Concept to help you create prototype. 
 
 #MVR-VM Concept
