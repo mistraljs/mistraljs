@@ -3,6 +3,6 @@
 window.Mistral = window.Mistral || {};
 window.Mistral.routes = [];
 window.Mistral.config = {};
-window.Mistral.version = '0.0.1';
+window.Mistral.version = '0.1.0';
 window.Mistral.name = 'Mistral.js';
 window.Mistral.tags = ['{{', '}}'];
