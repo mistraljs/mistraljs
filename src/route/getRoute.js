@@ -1,5 +1,9 @@
 (function (Mistral) {
     'use strict';
+    Mistral.getCurretRoute = function(){
+        return Mistral.getRoute(window.location.hash.replace('#', ''));
+    };
+
     Mistral.getRoute = function (path) {
         var result;
         for (var ii = 0; ii < Mistral.routes.length; ii++) {

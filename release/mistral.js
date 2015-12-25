@@ -1,6 +1,7 @@
 // Create global Mistral obj and its namespaces
 // build processes may have already created an Mistral obj
 window.Mistral = window.Mistral || {};
+window.Session = window.Session || {};
 window.Mistral.routes = [];
 window.Mistral.config = {};
 window.Mistral.version = '0.0.1';
@@ -80,8 +81,33 @@ Mistral.escape = escapeHtml;
 
 })(window.Mistral);
 
+
+(function (Session) {
+    'use strict';
+    var Sessions = {};
+    Session.set = function (name, value) {
+        Sessions[name] = value;
+    };
+    Session.setReactive = function(name, value, vmname){
+        Sessions[name] = value;
+        Mistral.refresh(vmname);
+    };
+    Session.get = function (name) {
+        return Sessions[name];
+    };
+
+    Session.equals = function(name, value){
+        return Session.get(name) == value;
+    }
+
+})(window.Session);
+
 (function (Mistral) {
     'use strict';
+    Mistral.getCurretRoute = function(){
+        return Mistral.getRoute(window.location.hash.replace('#', ''));
+    };
+
     Mistral.getRoute = function (path) {
         var result;
         for (var ii = 0; ii < Mistral.routes.length; ii++) {
@@ -130,6 +156,41 @@ Mistral.escape = escapeHtml;
 
 (function (Mistral) {
     'use strict';
+    Mistral.refresh = function (vmname) {
+        if (typeof vmname === "string") {
+            console.log('string')
+            var curr = Mistral.getCurretRoute();
+            if (curr) {
+                for (var jj = 0; jj < curr.templates.length; jj++) {
+                    if (curr.templates[jj].name === vmname)
+                        Mistral.renderTemplate(curr.templates[jj]);
+
+                }
+            }
+            else console.error('Error No route found');
+
+        }
+        else if (isArray(vmname)) {
+            console.log('array')
+            var curr = Mistral.getCurretRoute();
+            if (curr) {
+                for (var jj = 0; jj < curr.templates.length; jj++) {
+                    for (var kk = 0; kk < vmname.length; kk++) {
+                        if (curr.templates[jj].name === vmname[kk])
+                            Mistral.renderTemplate(curr.templates[jj]);
+                    }
+                }
+            }
+            else console.error('Error No route found');
+        }
+        else {
+            Mistral.renderPath(window.location.hash.replace('#', ''));
+        }
+    };
+})(window.Mistral);
+
+(function (Mistral) {
+    'use strict';
     Mistral.route = function (path, routeName, templates) {
         Mistral.routes.push({
             path: path,
@@ -137,6 +198,7 @@ Mistral.escape = escapeHtml;
             templates: templates
         });
     };
+
 })(window.Mistral);
 
 (function (Mistral) {

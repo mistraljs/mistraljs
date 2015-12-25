@@ -20,6 +20,13 @@
             renderIn: '.nav',
             name: 'nav'
         };
+        Session.set("newsfeed", [{
+            "content": "Moe"
+        }, {
+            "content": "Larry"
+        }, {
+            "content": "Curly"
+        }]);
         Mistral.configure({
             templates: [nav]
         });
@@ -39,13 +46,10 @@
             name: 'newsfeed',
             data: {
                 name: "Yoza Wiratama",
-                newsfeed: [{
-                    "content": "Moe"
-                }, {
-                    "content": "Larry"
-                }, {
-                    "content": "Curly"
-                }]
+                newsfeed: Session.get("newsfeed")
+            },
+            onBefore : function(){
+                console.log('before');
             }
         }]);
         Mistral.routeOtherWise('/');

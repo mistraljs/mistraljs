@@ -7,4 +7,5 @@
             templates: templates
         });
     };
+
 })(window.Mistral);

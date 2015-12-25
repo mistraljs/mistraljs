@@ -24,6 +24,7 @@ gulp.task('release', function () {
         './src/mistral.js',
         './src/firstInit.js',
         './src/config/*.js',
+        './src/services/*.js',
         './src/route/*.js',
         './src/template/*.js',
         './src/utils/*.js',
