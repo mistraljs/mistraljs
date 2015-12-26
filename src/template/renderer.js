@@ -141,8 +141,16 @@
                     t.onBefore();
 
                 var output = resp;
-                if (t.data)
-                    output = Mistral.render(resp, t.data);
+                if (t.data){
+                    var renderData = {};
+                    for(var d in t.data){
+                        if(typeof t.data[d] === 'function'){
+                            renderData[d] = t.data[d]();
+                        }
+                        else renderData[d] = t.data[d];
+                    }
+                    output = Mistral.render(resp, renderData);
+                }
                 if (t.templates) {
                     var partial = {};
                     var data = {};

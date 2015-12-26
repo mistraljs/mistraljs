@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+</head>
+
+<body>
+<div id="content"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="../release/mistral.js"></script>
+<script>
+    var nav = {
+        pathToTemplate: 'templates/nav.html',
+        renderIn: '.nav',
+        name: 'nav'
+    };
+    var feeds = new Mistral.Collection("feeds",{
+        methods : {
+            insert : function(param){
+                var updatedFeeds = [];
+                var feeds = localStorage["feeds"];
+                if(feeds){
+                    updatedFeeds = JSON.parse(feeds);
+                    updatedFeeds.push(param);
+                }
+                else {
+                    updatedFeeds.push(param);
+                }
+                localStorage["feeds"] = JSON.stringify(updatedFeeds);
+                Mistral.refresh();
+            },
+            update : function(query, set){
+                var updatedFeeds = [];
+                var feeds = localStorage["feeds"];
+                if(feeds){
+
+                }
+                else console.log("Collection undefined");
+            },
+            remove : function (param) {
+                var feeds = localStorage["feeds"];
+                if(feeds){
+                    feeds = JSON.parse(feeds);
+                    feeds = _.without(feeds, _.findWhere(feeds, param));
+                    localStorage["feeds"] = JSON.stringify(feeds);
+                    Mistral.refresh();
+                }
+                else console.log("Collection undefined");
+            },
+            find : function(param){
+                var feeds = localStorage["feeds"];
+                if(feeds){
+                    feeds = JSON.parse(feeds);
+                    return _.where(feeds, param);
+                }
+                else return [];
+            },
+            findOne : function(param){
+                var feeds = localStorage["feeds"];
+                if(feeds){
+                    feeds = JSON.parse(feeds);
+                    return _.findWhere(feeds, param);
+                }
+                else return [];
+            }
+        }
+    });
+    var f = feeds.find();
+    Mistral.configure({
+        templates: [nav]
+    });
+    Mistral.route('/', 'newsfeed', [{
+        pathToTemplate: 'templates/newsfeed.html',
+        renderIn: '#content',
+        name: 'newsfeed',
+        data: {
+            name: "Yoza Wiratama",
+            newsfeed: function(){
+                return feeds.find();
+            }
+        },
+        onBefore : function(){
+            console.log('before');
+        }
+    }]);
+    Mistral.routeOtherWise('/');
+
+</script>
+</body>
+
+</html>

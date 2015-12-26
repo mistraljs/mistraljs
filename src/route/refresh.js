@@ -30,5 +30,10 @@
         else {
             Mistral.renderPath(window.location.hash.replace('#', ''));
         }
+
+        var vms = Mistral.config.templates;
+        for(var ii = 0; ii < vms.length; ii++){
+            Mistral.renderTemplate(vms[ii]);
+        }
     };
 })(window.Mistral);

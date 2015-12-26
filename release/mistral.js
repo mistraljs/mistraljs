@@ -4,10 +4,9 @@ window.Mistral = window.Mistral || {};
 window.Session = window.Session || {};
 window.Mistral.routes = [];
 window.Mistral.config = {};
-window.Mistral.version = '0.0.1';
+window.Mistral.version = '0.1.0';
 window.Mistral.name = 'Mistral.js';
 window.Mistral.tags = ['{{', '}}'];
-
 var objectToString = Object.prototype.toString;
 var isArray = Array.isArray || function isArrayPolyfill(object) {
     return objectToString.call(object) === '[object Array]';
@@ -81,6 +80,21 @@ Mistral.escape = escapeHtml;
 
 })(window.Mistral);
 
+(function (Mistral) {
+    'use strict';
+    //dbTypes : localstorage, service, indexeddb, mongodb
+    Mistral.Collection = function (param) {
+        var self = this;
+        self.name = param.name;
+        self.dbType = param.dbType;
+        self.auto = param.auto;
+        self.url = param.url;
+        for (var m in param.methods) {
+            self[m] = param.methods[m];
+        }
+    };
+
+})(window.Mistral);
 
 (function (Session) {
     'use strict';
@@ -185,6 +199,11 @@ Mistral.escape = escapeHtml;
         }
         else {
             Mistral.renderPath(window.location.hash.replace('#', ''));
+        }
+
+        var vms = Mistral.config.templates;
+        for(var ii = 0; ii < vms.length; ii++){
+            Mistral.renderTemplate(vms[ii]);
         }
     };
 })(window.Mistral);
@@ -533,8 +552,16 @@ Mistral.escape = escapeHtml;
                     t.onBefore();
 
                 var output = resp;
-                if (t.data)
-                    output = Mistral.render(resp, t.data);
+                if (t.data){
+                    var renderData = {};
+                    for(var d in t.data){
+                        if(typeof t.data[d] === 'function'){
+                            renderData[d] = t.data[d]();
+                        }
+                        else renderData[d] = t.data[d];
+                    }
+                    output = Mistral.render(resp, renderData);
+                }
                 if (t.templates) {
                     var partial = {};
                     var data = {};
