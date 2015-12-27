@@ -2,6 +2,7 @@
 // build processes may have already created an Mistral obj
 window.Mistral = window.Mistral || {};
 window.Session = window.Session || {};
+window.Random = window.Random || {};
 window.Mistral.routes = [];
 window.Mistral.config = {};
 window.Mistral.version = '0.1.0';
@@ -80,21 +81,89 @@ Mistral.escape = escapeHtml;
 
 })(window.Mistral);
 
-(function (Mistral) {
+(function (Mistral, Random) {
     'use strict';
     //dbTypes : localstorage, service, indexeddb, mongodb
-    Mistral.Collection = function (param) {
-        var self = this;
-        self.name = param.name;
-        self.dbType = param.dbType;
-        self.auto = param.auto;
-        self.url = param.url;
-        for (var m in param.methods) {
-            self[m] = param.methods[m];
+    Mistral.Collection = function (name, param) {
+        if (name) {
+            var self = this;
+            self.name = name;
+            if (param) {
+
+            }
+            else {
+                self.dbType = "localstorage";
+                self.autoRefresh = true;
+                self.url = undefined;
+                //for (var m in param.methods) {
+                //    self[m] = param.methods[m];
+                //}
+                self.insert = function (param) {
+                    var updated = [];
+                    var domain = localStorage[self.name];
+                    if (domain) {
+                        updated = JSON.parse(domain);
+                        param['id'] = Random.id(27);
+                        updated.push(param);
+                    }
+                    else {
+                        updated.push(param);
+                    }
+                    localStorage[self.name] = JSON.stringify(updated);
+                    Mistral.refresh();
+                },
+                    self.update = function (query, set) {
+                        var domain = localStorage[self.name];
+                        if (domain) {
+                            domain = JSON.parse(domain);
+                            _.each(domain, function (item) {
+                                console.log(_.isMatch(item, query));
+                                if (_.isMatch(item, query)) {
+                                    for (var s in set) {
+                                        item[s] = set[s];
+                                    }
+                                }
+
+                            });
+                            localStorage[self.name] = JSON.stringify(domain);
+                            Mistral.refresh();
+                            //console.log(match);
+                        }
+                        else console.log("Collection undefined");
+                    },
+                    self.remove = function (param) {
+                        var domain = localStorage[self.name];
+                        if (domain) {
+                            domain = JSON.parse(domain);
+                            domain = _.without(domain, _.findWhere(domain, param));
+                            localStorage[self.name] = JSON.stringify(domain);
+                            Mistral.refresh();
+                        }
+                        else console.log("Collection undefined");
+                    },
+                    self.find = function (param) {
+                        var domain = localStorage[self.name];
+                        if (domain) {
+                            domain = JSON.parse(domain);
+                            return _.where(domain, param);
+                        }
+                        else return [];
+                    },
+                    self.findOne = function (param) {
+                        var domain = localStorage[self.name];
+                        if (domain) {
+                            domain = JSON.parse(domain);
+                            return _.findWhere(domain, param);
+                        }
+                        else return [];
+                    }
+            }
         }
+        else console.error("Collection name is required");
+
     };
 
-})(window.Mistral);
+})(window.Mistral, window.Random);
 
 (function (Session) {
     'use strict';
@@ -706,6 +775,23 @@ function nestTokens(tokens) {
 
     return nestedTokens;
 }
+
+(function (Random) {
+    'use strict';
+    Random.id = function (length) {
+        var text = "";
+        var d = new Date();
+        var n = d.getTime();
+        var possible = n+"LhE4vAuGr5xMScHCWlUtZejPRbY21fXns8yJimKkQVd6TwO9qF7D3gp0IaBNzo "+n;
+
+        for( var i=0; i < length; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    };
+
+
+})(window.Random);
 
 (function (mistral) {
     'use strict';
