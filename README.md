@@ -6,14 +6,19 @@ Mistraljs is library use MVR-VM (Model View Route - ViewModel) Concept to help y
 
 A programming concept that combine MVVM with Routing System, that makes MVRVM really help to make a prototype. But for now, Mistraljs only in MVR development state.
 
-#Installation 
+# Installation 
 
-This is how to install :
+To support `open source community` mistraljs use 2 important dependecies, jquery and underscorejs.
 ```
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="../release/mistral.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="../release/mistral.js"></script>
 ```
-Mistraljs use jquery to make it better. And this is base example using Mistraljs :
+## NPM
+```
+npm install mistraljs
+```
+Mistraljs use jquery and underscore to make it better. And this is base example using Mistraljs :
 ```
 <!DOCTYPE html>
 <html lang="">
@@ -37,6 +42,13 @@ Mistraljs use jquery to make it better. And this is base example using Mistraljs
             renderIn: '.nav',
             name: 'nav'
         };
+        Session.set("newsfeed", [{
+            "content": "Moe"
+        }, {
+            "content": "Larry"
+        }, {
+            "content": "Curly"
+        }]);
         Mistral.configure({
             templates: [nav]
         });
@@ -56,13 +68,10 @@ Mistraljs use jquery to make it better. And this is base example using Mistraljs
             name: 'newsfeed',
             data: {
                 name: "Yoza Wiratama",
-                newsfeed: [{
-                    "content": "Moe"
-                }, {
-                    "content": "Larry"
-                }, {
-                    "content": "Curly"
-                }]
+                newsfeed: Session.get("newsfeed")
+            },
+            onBefore : function(){
+                console.log('before');
             }
         }]);
         Mistral.routeOtherWise('/');
@@ -72,25 +81,50 @@ Mistraljs use jquery to make it better. And this is base example using Mistraljs
 
 </html>
 
+
 ```
 
 #Route
-In `router.js` we can init route code with this standard :
+In `router.js` or `router script` we can init route code with this standard :
 ```
-Mistral.route('/', 'routeName', [{
-    pathToTemplate: 'template.html',
-    renderIn: 'Where element by id template to render',
-    name: 'templateName',
-    onRendered: function () {
-      //when template finish to render
+var nav = {
+    pathToTemplate: 'templates/nav.html',
+    renderIn: '.nav',
+    name: 'nav'
+};
+Session.set("newsfeed", [{
+    "content": "Moe"
+}, {
+    "content": "Larry"
+}, {
+    "content": "Curly"
+}]);
+Mistral.configure({
+    templates: [nav]
+});
+Mistral.route('/', 'base', [{
+    pathToTemplate: 'templates/hello.html',
+    renderIn: '#content',
+    name: 'hello'
+}]);
+Mistral.route('/about', 'about', [{
+    pathToTemplate: 'templates/about.html',
+    renderIn: '#content',
+    name: 'about'
+}]);
+Mistral.route('/newsfeed', 'newsfeed', [{
+    pathToTemplate: 'templates/newsfeed.html',
+    renderIn: '#content',
+    name: 'newsfeed',
+    data: {
+        name: "Yoza Wiratama",
+        newsfeed: Session.get("newsfeed")
     },
-    onBefore: function () {
-      //before load template and render it
-    },
-    onAfter : function(){
-      // after render
+    onBefore : function(){
+        console.log('before');
     }
 }]);
+Mistral.routeOtherWise('/');
 ```
 Example :
 ```
@@ -109,12 +143,12 @@ var navbar = {
     renderIn: 'navbar',
     name: 'navbar'
 }
-Mst.configure({
-    templates: [navbar]
+Mistral.configure({
+    templates: [nav]
 });
 ```
 `templates` using array of ViewModel, so we can add more templates in a layout, for example navbar and sidebar.
 
-
-
-
+# Session
+# Collection
+# Random
