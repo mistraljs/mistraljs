@@ -18,9 +18,9 @@
                 self.insert = function (param) {
                     var updated = [];
                     var domain = localStorage[self.name];
+                    param['id'] = Random.id(27);
                     if (domain) {
                         updated = JSON.parse(domain);
-                        param['id'] = Random.id(27);
                         updated.push(param);
                     }
                     else {
@@ -28,6 +28,7 @@
                     }
                     localStorage[self.name] = JSON.stringify(updated);
                     Mistral.refresh();
+                    return param.id;
                 },
                     self.update = function (query, set) {
                         var domain = localStorage[self.name];
