@@ -5,7 +5,7 @@ window.Session = window.Session || {};
 window.Random = window.Random || {};
 window.Mistral.routes = [];
 window.Mistral.config = {};
-window.Mistral.version = '0.1.0';
+window.Mistral.version = '0.1.3';
 window.Mistral.name = 'Mistral.js';
 window.Mistral.tags = ['{{', '}}'];
 var objectToString = Object.prototype.toString;
@@ -117,7 +117,6 @@ Mistral.escape = escapeHtml;
                         if (domain) {
                             domain = JSON.parse(domain);
                             _.each(domain, function (item) {
-                                console.log(_.isMatch(item, query));
                                 if (_.isMatch(item, query)) {
                                     for (var s in set) {
                                         item[s] = set[s];
@@ -782,8 +781,8 @@ function nestTokens(tokens) {
         var text = "";
         var d = new Date();
         var n = d.getTime();
-        var possible = n+"LhE4vAuGr5xMScHCWlUtZejPRbY21fXns8yJimKkQVd6TwO9qF7D3gp0IaBNzo "+n;
-
+        var possible = "LhE4vAuGr5xMScHCWlUtZejPRbY21fXns8yJimKkQVd6TwO9qF7D3gp0IaBNzo"+n;
+        possible = _.shuffle(possible.split('')).join('');
         for( var i=0; i < length; i++ )
             text += possible.charAt(Math.floor(Math.random() * possible.length));
 

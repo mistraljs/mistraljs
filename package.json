@@ -1,6 +1,6 @@
 {
     "name": "mistraljs",
-    "version": "0.1.0",
+    "version": "0.1.3",
     "description": "a core of first library which use MVRVM Programming concept",
     "codename": "Wind",
     "main": "release/mistral.js",
