@@ -8,7 +8,7 @@ A programming concept that combine MVVM with Routing System, that makes MVRVM re
 
 # Installation 
 
-To support `open source community` mistraljs use 2 important dependecies, jquery and underscorejs.
+To support **open source community** mistraljs use 2 important dependecies, jquery and underscorejs.
 ```
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
@@ -137,7 +137,7 @@ Mistral.route('/', 'home', [{
 ```
 Because templates using array of object (View Model), so we can render more templates in one route.
 ## route(path, routeName, templates)
-## go
+## go(path)
 ## getRoute(path)
 ## getCurrentRoute()
 ## getRouteByName(name)
@@ -159,17 +159,60 @@ Mistral.configure({
 `templates` using array of ViewModel, so we can add more templates in a layout, for example navbar and sidebar.
 
 # Session
+Session is a provider to store data or value on client globally. Store and also can refresh view or template automatically.
 ## set(name, value)
+```
+Session.set('activeId', 'TTdayoza76876adGQRA');
+```
 ## setReactive(name, value, templateName)
+setReactive method will provide us to refresh all templates or a template by name. Leave empty or undefined it will refresh all.
+```
+Session.setReactive('activeId', 'TTdayoza76876adGQRA'); // refresh all templates
+Session.setReactive('activeId', 'TTdayoza76876adGQRA', 'nav'); // refresh template with name nav
+```
 ## get(name)
+```
+var activeId = Session.get('activeId');
+```
 ## equals(name, value)
+```
+if(Session.equals('activeId', 'TTdayoza76876adGQRA')) return true;
+else return false;
+```
 # Collection
+Collection is a connection between view and data, also like a table in database. For now collection only provides store data to localstorage easily.
+Simple init :
+```
+var feeds = new Mistral.Collection('feed');
+```
 ### Localstorage
-### insert
-### update
+```
+var feeds = new Mistral.Collection('feed');
+```
+### insert(data)
+Insert data to collection.
+```
+feeds.insert({content : 'cool'}); 
+var newId = feeds.insert({content : 'cool'}); // "tto2Mt0iTVhi8hK4E4RoxzIAuqH"
+```
+### update(query, set)
+```
+feeds.update({id : 'tto2Mt0iTVhi8hK4E4RoxzIAuqH'}, {content : 'super cool'});
+```
+### find(query)
+`find` will return array.
+```
+feeds.find({id : 'tto2Mt0iTVhi8hK4E4RoxzIAuqH'});
+```
+### findOne(query)
+`findOne` will return first object.
+```
+feeds.findOne({id : 'tto2Mt0iTVhi8hK4E4RoxzIAuqH'});
+```
 ### remove
-### find
-### findOne
+```
+feeds.remove({id : 'tto2Mt0iTVhi8hK4E4RoxzIAuqH'});
+```
 # Random (alpha)
 Generate random string to make unique id or secret. 
 ## Random.id(length)
@@ -187,7 +230,5 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
 
 
