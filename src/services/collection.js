@@ -6,7 +6,14 @@
             var self = this;
             self.name = name;
             if (param) {
-
+                if (param.dbType == 'service') {
+                    self.dbType = param.dbType;
+                    self.autoRefresh = param.autoRefresh;
+                    self.url = param.url;
+                    for (var m in param.methods) {
+                        self[m] = param.methods[m];
+                    }
+                }
             }
             else {
                 self.dbType = "localstorage";

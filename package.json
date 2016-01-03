@@ -1,42 +1,42 @@
 {
-    "name": "mistraljs",
-    "version": "0.1.31",
-    "description": "a core of first library which use MVRVM Programming concept",
-    "codename": "Wind",
-    "main": "release/mistral.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/mistraljs/mistraljs.git"
-    },
-    "keywords": [
+  "name": "mistraljs",
+  "version": "0.1.4",
+  "description": "a core of first library which use MVRVM Programming concept",
+  "codename": "Wind",
+  "main": "release/mistral.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mistraljs/mistraljs.git"
+  },
+  "keywords": [
     "mvrvm",
     "mvc",
     "router",
     "route",
     "backbone",
     "mvvm",
-        "template",
-        "mustache"
+    "template",
+    "mustache"
   ],
-    "author": "Yoza Wiratama",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/mistraljs/mistraljs/issues"
-    },
-    "homepage": "https://github.com/mistraljs/mistraljs#readme",
-    "devDependencies": {
-        "github": "^0.2.4",
-        "gulp": "^3.9.0",
-        "gulp-concat": "^2.6.0",
-        "gulp-if": "^2.0.0",
-        "gulp-jscs": "^3.0.2",
-        "gulp-rename": "^1.2.2",
-        "gulp-strip-debug": "^1.1.0",
-        "gulp-template": "^3.1.0",
-        "gulp-uglify": "^1.5.1",
-        "gulp-util": "^3.0.7"
-    }
+  "author": "Yoza Wiratama",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mistraljs/mistraljs/issues"
+  },
+  "homepage": "https://github.com/mistraljs/mistraljs#readme",
+  "devDependencies": {
+    "github": "^0.2.4",
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-if": "^2.0.0",
+    "gulp-jscs": "^3.0.2",
+    "gulp-rename": "^1.2.2",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-template": "^3.1.0",
+    "gulp-uglify": "^1.5.1",
+    "gulp-util": "^3.0.7"
+  }
 }

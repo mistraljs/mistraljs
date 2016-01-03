@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+</head>
+<body>
+<div class="nav"></div>
+<div id="content"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="../release/mistral.js"></script>
+<script>
+    var nav = {
+        pathToTemplate: 'templates/nav.html',
+        renderIn: '.nav',
+        name: 'nav'
+    };
+    var posts = new Mistral.Collection("posts",{
+        dbType : 'service',
+        url : 'http://jsonplaceholder.typicode.com',
+        methods : {
+            find : function(id){
+                var url = this.url + '/posts';
+                if(id) url = url+'/'+id;
+                var result;
+                $.ajax({
+                    url : url,
+                    async : false,
+                    cache : false,
+                    success : function(resp){
+                        result = resp;
+                    }
+                });
+                return result;
+            }
+        }
+    });
+    Mistral.configure({
+        templates: [nav],
+        loading : {
+            pathToTemplate : 'templates/loading.html'
+        }
+    });
+    Mistral.route('/', 'post', [{
+        pathToTemplate: 'templates/post.html',
+        renderIn: '#content',
+        name: 'post',
+        data: {
+            name: "Yoza Wiratama",
+            posts: function(){
+                return posts.find(1);
+            }
+        },
+        onBefore : function(){
+//            console.log('before');
+        }
+    }]);
+    Mistral.routeOtherWise('/');
+
+</script>
+</body>
+
+</html>

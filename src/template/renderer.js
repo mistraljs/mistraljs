@@ -135,16 +135,18 @@
     };
 
     Mistral.renderTemplate = function (t) {
+        Mistral.renderLoading(t);
         $.get(t.pathToTemplate)
             .success(function (resp) {
-                if (t.onBefore)
+                if (t.onBefore) {
                     t.onBefore();
+                }
 
                 var output = resp;
-                if (t.data){
+                if (t.data) {
                     var renderData = {};
-                    for(var d in t.data){
-                        if(typeof t.data[d] === 'function'){
+                    for (var d in t.data) {
+                        if (typeof t.data[d] === 'function') {
                             renderData[d] = t.data[d]();
                         }
                         else renderData[d] = t.data[d];
@@ -164,8 +166,9 @@
                 $(t.renderIn).html(output);
                 if (t.onRendered)
                     t.onRendered();
-                if (t.onAfter)
+                if (t.onAfter) {
                     t.onAfter();
+                }
             });
     }
 
@@ -173,9 +176,21 @@
         var r = Mistral.getRoute(path);
         for (var jj = 0; jj < r.templates.length; jj++) {
             Mistral.renderTemplate(r.templates[jj]);
+        }
+    };
+
+    Mistral.renderLoading = function (t) {
+        if (Mistral.config.loading) {
+            //var loading = Mistral.getView(Mistral.config.loading.pathToTemplate);
+            //$(t.renderIn).html(loading);
+            $.get(Mistral.config.loading.pathToTemplate)
+                .success(function (resp) {
+                    $(t.renderIn).html(resp);
+                });
 
         }
-    }
+        else $(t.renderIn).html('loading...');
+    };
 
     Mistral.getView = function (path) {
         var result = '';

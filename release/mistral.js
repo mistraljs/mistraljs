@@ -89,7 +89,14 @@ Mistral.escape = escapeHtml;
             var self = this;
             self.name = name;
             if (param) {
-
+                if (param.dbType == 'service') {
+                    self.dbType = param.dbType;
+                    self.autoRefresh = param.autoRefresh;
+                    self.url = param.url;
+                    for (var m in param.methods) {
+                        self[m] = param.methods[m];
+                    }
+                }
             }
             else {
                 self.dbType = "localstorage";
@@ -615,16 +622,18 @@ Mistral.escape = escapeHtml;
     };
 
     Mistral.renderTemplate = function (t) {
+        Mistral.renderLoading(t);
         $.get(t.pathToTemplate)
             .success(function (resp) {
-                if (t.onBefore)
+                if (t.onBefore) {
                     t.onBefore();
+                }
 
                 var output = resp;
-                if (t.data){
+                if (t.data) {
                     var renderData = {};
-                    for(var d in t.data){
-                        if(typeof t.data[d] === 'function'){
+                    for (var d in t.data) {
+                        if (typeof t.data[d] === 'function') {
                             renderData[d] = t.data[d]();
                         }
                         else renderData[d] = t.data[d];
@@ -644,8 +653,9 @@ Mistral.escape = escapeHtml;
                 $(t.renderIn).html(output);
                 if (t.onRendered)
                     t.onRendered();
-                if (t.onAfter)
+                if (t.onAfter) {
                     t.onAfter();
+                }
             });
     }
 
@@ -653,9 +663,21 @@ Mistral.escape = escapeHtml;
         var r = Mistral.getRoute(path);
         for (var jj = 0; jj < r.templates.length; jj++) {
             Mistral.renderTemplate(r.templates[jj]);
+        }
+    };
+
+    Mistral.renderLoading = function (t) {
+        if (Mistral.config.loading) {
+            //var loading = Mistral.getView(Mistral.config.loading.pathToTemplate);
+            //$(t.renderIn).html(loading);
+            $.get(Mistral.config.loading.pathToTemplate)
+                .success(function (resp) {
+                    $(t.renderIn).html(resp);
+                });
 
         }
-    }
+        else $(t.renderIn).html('loading...');
+    };
 
     Mistral.getView = function (path) {
         var result = '';
@@ -798,8 +820,8 @@ function nestTokens(tokens) {
 
     window.onhashchange = function (ret) {
         Mistral.renderPath(window.location.hash.replace('#', ''));
-        if (Mistral.config.viewModels) {
-            var vm = Mistral.config.viewModels;
+        if (Mistral.config.templates) {
+            var vm = Mistral.config.templates;
             for (var ii = 0; ii < vm.length; ii++) {
                 console.log(typeof vm[ii].onRouteChanged === 'function');
                 if (typeof vm[ii].onRouteChanged === 'function')
