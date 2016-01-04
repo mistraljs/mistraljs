@@ -136,13 +136,62 @@ Mistral.route('/', 'home', [{
 }]);
 ```
 Because templates using array of object (View Model), so we can render more templates in one route.
+## template
+Full template code :
+```
+{
+    pathToTemplate: 'templates/newsfeed.html',
+    renderIn: '#content',
+    name: 'newsfeed',
+    data: {
+        name: "Yoza Wiratama",
+        newsfeed: Session.get("newsfeed"),
+        posts : function(){
+            return posts .find();
+        }
+    },
+    onBefore : function(){
+        console.log('before');
+    },
+    onRendered : function(){},
+    onAfter : function(){},
+    templates : [widget1, widget2]
+}
+```
+- pathToTemplate : path to your html template or template code
+- renderIn : use jquery selector to insert compiled template code
+- name : template name
+- data : js object to render data in mustache
+- onBefore : on before render template but after get
+- onRendered : on template rendered 
+- onAfter : on after template rendered
+- tempplates : partial templates, like render templates in templates, i call it `templateception` yeah
+
+
 ## route(path, routeName, templates)
+`path` is url address path or hash path
+`routeName` is name of route
+`templates` is array of template, so we can add more than one template in one route
+
 ## go(path)
+`Mistral.go('/')` it will go to path `/`
+
 ## getRoute(path)
+`Mistral.getRoute('/')` will return route with path `/`
+
 ## getCurrentRoute()
+`Mistral.getCurrentRoute()` will return current route.
+
 ## getRouteByName(name)
+`Mistral.getRouteName('index')` will return route with name index
+
 ## routeOtherWise(route)
+`Mistral.routeOtherWise('/')` required. it will go to `/` if not find any route
+
 ## refresh(templateName)
+`Mistral.refresh()` it will refresh any rendered templates in page.
+`Mistral.refresh('posts')` it will refresh templates in page with name `posts`.
+`Mistral.refresh(['posts', 'feeds'])` it will refresh templates in page with name `posts` and `feeds`.
 
 # Configure
 If you want to use a default ViewModel in default template or layout for all routes you can configure it. :
@@ -185,6 +234,42 @@ Simple init :
 ```
 var feeds = new Mistral.Collection('feed');
 ```
+
+### Service or API
+```
+    var posts = new Mistral.Collection("posts",{
+        dbType : 'service',
+        url : 'http://jsonplaceholder.typicode.com',
+        methods : {
+            find : function(id){
+                var url = this.url + '/posts';
+                if(id) url = url+'/'+id;
+                var result;
+                $.ajax({
+                    url : url,
+                    async : false,
+                    cache : false,
+                    success : function(resp){
+                        result = resp;
+                    }
+                });
+                return result;
+            }
+        }
+    });
+    var postTemplate = {
+        pathToTemplate: 'templates/post.html',
+        renderIn: '#content',
+        name: 'post',
+        data: {
+            name: "Yoza Wiratama",
+            posts: function(){
+                return posts.find(1);
+            }
+        }
+    };
+```
+
 ### Localstorage
 ```
 var feeds = new Mistral.Collection('feed');
@@ -213,6 +298,8 @@ feeds.findOne({id : 'tto2Mt0iTVhi8hK4E4RoxzIAuqH'});
 ```
 feeds.remove({id : 'tto2Mt0iTVhi8hK4E4RoxzIAuqH'});
 ```
+
+
 # Random (alpha)
 Generate random string to make unique id or secret. 
 ## Random.id(length)
